@@ -1,7 +1,7 @@
 # iCalDAV
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.icalDAV/icalendar-core.svg)](https://search.maven.org/search?q=g:io.github.icalDAV)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.icaldav/icalendar-core.svg)](https://search.maven.org/search?q=g:io.github.icaldav)
 
 A modern, pure Kotlin CalDAV and iCalendar library for JVM and Android applications.
 
@@ -92,24 +92,24 @@ Libraries in this space operate at different abstraction levels:
 ```kotlin
 dependencies {
     // Core iCalendar parsing (required)
-    implementation("io.github.icalDAV:icalendar-core:1.0.0")
+    implementation("io.github.icaldav:icalendar-core:1.0.0")
 
     // CalDAV client (includes webdav-core)
-    implementation("io.github.icalDAV:caldav-core:1.0.0")
+    implementation("io.github.icaldav:caldav-core:1.0.0")
 
     // Sync engine (optional)
-    implementation("io.github.icalDAV:caldav-sync:1.0.0")
+    implementation("io.github.icaldav:caldav-sync:1.0.0")
 
     // ICS subscriptions (optional)
-    implementation("io.github.icalDAV:ics-subscription:1.0.0")
+    implementation("io.github.icaldav:ics-subscription:1.0.0")
 }
 ```
 
 ### Gradle (Groovy)
 
 ```groovy
-implementation 'io.github.icalDAV:icalendar-core:1.0.0'
-implementation 'io.github.icalDAV:caldav-core:1.0.0'
+implementation 'io.github.icaldav:icalendar-core:1.0.0'
+implementation 'io.github.icaldav:caldav-core:1.0.0'
 ```
 
 ## Quick Start

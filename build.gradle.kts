@@ -9,7 +9,7 @@ plugins {
 }
 
 allprojects {
-    group = "io.github.icalDAV"
+    group = "io.github.icaldav"
     version = "1.0.0"
 }
 
