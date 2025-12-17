@@ -1,0 +1,73 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.vscode/
+
+# Kotlin
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Local configuration
+local.properties
+*.local
+
+# Test outputs
+test-output/
+test-results/
+
+# Coverage reports
+jacoco/
+coverage/
+*.exec
+
+# Documentation build
+dokka/
+
+# Secrets (never commit these)
+*.jks
+*.keystore
+credentials.json
+secrets.json
+.env
+.env.local
+
+# Test credentials (NEVER commit - contains iCloud passwords)
+test-credentials.local.properties
+*-credentials*.properties
+
+# Android (if using caldav-android)
+*.apk
+*.aab
+*.dex
+*.ap_
+
+# Logs
+*.log
+
+# Archive (internal development docs)
+ARCHIVE/
