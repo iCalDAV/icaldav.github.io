@@ -1,0 +1,52 @@
+plugins {
+    kotlin("jvm") version "1.9.22" apply false
+    id("com.android.library") version "8.2.0" apply false
+    id("org.jetbrains.dokka") version "1.9.10" apply false
+    id("io.gitlab.arturbosch.detekt") version "1.23.4" apply false
+    id("jacoco")
+    id("signing")
+    id("maven-publish")
+}
+
+allprojects {
+    group = "io.github.icaldav"
+    version = "1.0.0"
+}
+
+subprojects {
+    apply(plugin = "io.gitlab.arturbosch.detekt")
+    apply(plugin = "jacoco")
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "17"
+            freeCompilerArgs = listOf("-Xjsr305=strict")
+        }
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
+
+    // Configure jacoco after project evaluation to ensure tasks exist
+    afterEvaluate {
+        tasks.findByName("test")?.let { testTask ->
+            tasks.findByName("jacocoTestReport")?.let { jacocoTask ->
+                testTask.finalizedBy(jacocoTask)
+            }
+        }
+
+        tasks.withType<JacocoReport> {
+            reports {
+                xml.required.set(true)
+                html.required.set(true)
+            }
+        }
+    }
+
+    configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
+        buildUponDefaultConfig = true
+        allRules = false
+        config.setFrom(files("${rootProject.projectDir}/detekt.yml"))
+    }
+}

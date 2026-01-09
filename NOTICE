@@ -1,0 +1,16 @@
+iCalDAV
+Copyright 2025 iCalDAV Contributors
+
+This product includes software developed by:
+
+---
+
+OkHttp (https://square.github.io/okhttp/)
+Copyright 2019 Square, Inc.
+Licensed under the Apache License, Version 2.0
+
+---
+
+kotlinx.coroutines (https://github.com/Kotlin/kotlinx.coroutines)
+Copyright 2016-2021 JetBrains s.r.o.
+Licensed under the Apache License, Version 2.0

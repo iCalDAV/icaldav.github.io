@@ -1,0 +1,68 @@
+# Detekt Configuration for iCalDAV
+# https://detekt.dev/docs/rules/
+
+build:
+  maxIssues: -1  # Don't fail build on issues (fix incrementally)
+  excludeCorrectable: false
+
+config:
+  validation: true
+  warningsAsErrors: false
+
+processors:
+  active: true
+
+console-reports:
+  active: true
+
+comments:
+  CommentOverPrivateProperty:
+    active: false
+  UndocumentedPublicClass:
+    active: false
+  UndocumentedPublicFunction:
+    active: false
+
+complexity:
+  LongMethod:
+    threshold: 60
+  LongParameterList:
+    functionThreshold: 8
+    constructorThreshold: 10
+  TooManyFunctions:
+    thresholdInFiles: 30
+    thresholdInClasses: 25
+    thresholdInInterfaces: 15
+    thresholdInObjects: 15
+
+exceptions:
+  TooGenericExceptionCaught:
+    active: false
+  SwallowedException:
+    active: false
+
+naming:
+  FunctionNaming:
+    functionPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    excludes: ['**/test/**', '**/androidTest/**']
+  TopLevelPropertyNaming:
+    constantPattern: '[A-Z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*'
+
+style:
+  MagicNumber:
+    active: false
+  MaxLineLength:
+    maxLineLength: 120
+  ReturnCount:
+    max: 5
+  WildcardImport:
+    active: true
+  UnusedPrivateMember:
+    active: true
+    allowedNames: '_.*'
+
+potential-bugs:
+  UnsafeCast:
+    active: true
+  UselessPostfixExpression:
+    active: true
