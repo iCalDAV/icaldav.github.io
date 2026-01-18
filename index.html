@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iCalDAV - Kotlin CalDAV Client</title>
+    <meta name="description" content="A Kotlin CalDAV client with offline sync and conflict resolution. Works with iCloud, Nextcloud, and other CalDAV servers.">
+    <meta name="author" content="OneKash Labs">
+    <meta name="theme-color" content="#0a0a0f">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://icaldav.github.io/">
+    <meta property="og:title" content="iCalDAV - Kotlin CalDAV Client">
+    <meta property="og:description" content="A Kotlin CalDAV client with offline sync and conflict resolution.">
+    <meta property="og:image" content="https://icaldav.github.io/images/icaldav-icon.svg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="iCalDAV - Kotlin CalDAV Client">
+    <meta name="twitter:description" content="A Kotlin CalDAV client with offline sync and conflict resolution.">
+
+    <link rel="icon" type="image/svg+xml" href="images/icaldav-icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-code: #12121a;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.4);
+            --accent: #7c5cff;
+            --accent-glow: rgba(124, 92, 255, 0.3);
+            --border: rgba(255, 255, 255, 0.1);
+            --success: #4ade80;
+            --gradient-purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 10rem 2rem 6rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-glow);
+            color: var(--accent);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(124, 92, 255, 0.3);
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero-desc {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #6b4ce0;
+            text-decoration: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        /* Install */
+        .install {
+            padding: 4rem 2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .install-box {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .install-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .install-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .copy-btn.copied {
+            color: var(--success);
+        }
+
+        .install-code {
+            padding: 1.25rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            overflow-x: auto;
+        }
+
+        .install-code .comment {
+            color: var(--text-muted);
+        }
+
+        .install-code .string {
+            color: #a5d6ff;
+        }
+
+        .install-note {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Features */
+        .features {
+            padding: 6rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.75rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Code Example */
+        .example {
+            padding: 6rem 2rem;
+            background: rgba(255, 255, 255, 0.01);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .example-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-lang {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        pre {
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .code-keyword { color: #ff79c6; }
+        .code-type { color: #8be9fd; }
+        .code-string { color: #a5d6ff; }
+        .code-comment { color: var(--text-muted); }
+        .code-function { color: #50fa7b; }
+        .code-number { color: #bd93f9; }
+
+        /* Providers */
+        .providers {
+            padding: 6rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .provider-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .provider-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .provider-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .provider-card p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Modules */
+        .modules {
+            padding: 6rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .module-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .module-table th,
+        .module-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .module-table th {
+            background: rgba(255, 255, 255, 0.03);
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .module-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .module-table code {
+            background: rgba(124, 92, 255, 0.1);
+            color: var(--accent);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .module-table td:last-child {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-text a {
+            color: var(--text-muted);
+        }
+
+        .footer-text a:hover {
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .hero {
+                padding: 8rem 1.5rem 4rem;
+            }
+
+            .hero-desc {
+                font-size: 1.1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+
+            .install, .features, .example, .providers, .modules {
+                padding: 4rem 1.5rem;
+            }
+
+            pre {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Focus states */
+        a:focus-visible,
+        button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" class="logo">
+            <img src="images/icaldav-icon.svg" alt="iCalDAV">
+            iCalDAV
+        </a>
+        <div class="nav-links">
+            <a href="#install">Install</a>
+            <a href="#features">Features</a>
+            <a href="https://github.com/iCalDAV/iCalDAV">GitHub</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">Kotlin · JVM 17+ · Apache 2.0</div>
+        <h1>CalDAV sync for Kotlin</h1>
+        <p class="hero-desc">
+            A CalDAV client with offline sync and conflict resolution. Works with iCloud, Nextcloud, and other CalDAV servers.
+        </p>
+        <div class="hero-buttons">
+            <a href="#install" class="btn btn-primary">Get Started</a>
+            <a href="https://github.com/iCalDAV/iCalDAV" class="btn btn-secondary">View on GitHub</a>
+        </div>
+    </section>
+
+    <section class="install" id="install">
+        <div class="install-box">
+            <div class="install-header">
+                <span class="install-label">build.gradle.kts</span>
+                <button class="copy-btn" data-copy='implementation("org.onekash:icaldav-client:2.0.0")'>Copy</button>
+            </div>
+            <div class="install-code">
+                <span class="comment">// Add to your dependencies</span><br>
+                implementation(<span class="string">"org.onekash:icaldav-client:2.0.0"</span>)<br><br>
+                <span class="comment">// Optional: Sync engine with offline support</span><br>
+                implementation(<span class="string">"org.onekash:icaldav-sync:2.0.0"</span>)
+            </div>
+        </div>
+        <p class="install-note">Requires JVM 17+ and Kotlin 1.9+</p>
+    </section>
+
+    <section class="features" id="features">
+        <h2 class="section-title">Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📅</div>
+                <h3>RFC 5545 Compliant</h3>
+                <p>Full iCalendar parsing and generation. Recurring events, timezones, alarms, and more.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Offline Sync</h3>
+                <p>Queue changes offline and sync when connected. Automatic conflict resolution.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Auto Discovery</h3>
+                <p>Automatic CalDAV server and calendar discovery. Just provide credentials.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">☁️</div>
+                <h3>Provider Support</h3>
+                <p>Tested with iCloud, Nextcloud, Radicale, Baikal. Handles server quirks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Type-Safe Results</h3>
+                <p>Sealed DavResult class for exhaustive error handling. No exceptions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧩</div>
+                <h3>Modular</h3>
+                <p>Use just the parser, just the client, or the full sync engine. Your choice.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="example">
+        <div class="example-content">
+            <h2 class="section-title">Quick Start</h2>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Kotlin</span>
+                    <button class="copy-btn" data-copy="val client = CalDavClient.forProvider(
+    serverUrl = &quot;https://caldav.example.com&quot;,
+    username = &quot;user@example.com&quot;,
+    password = &quot;password&quot;
+)
+
+val discovery = client.discoverAccount(serverUrl)
+if (discovery is DavResult.Success) {
+    val calendar = discovery.value.calendars.first()
+
+    // Create event
+    val event = ICalEvent(
+        uid = UUID.randomUUID().toString(),
+        summary = &quot;Team Meeting&quot;,
+        dtStart = ICalDateTime.fromInstant(Instant.now()),
+        dtEnd = ICalDateTime.fromInstant(Instant.now().plus(1, ChronoUnit.HOURS))
+    )
+    client.createEvent(calendar.href, event)
+}">Copy</button>
+                </div>
+                <pre><code><span class="code-keyword">val</span> client = <span class="code-type">CalDavClient</span>.<span class="code-function">forProvider</span>(
+    serverUrl = <span class="code-string">"https://caldav.example.com"</span>,
+    username = <span class="code-string">"user@example.com"</span>,
+    password = <span class="code-string">"password"</span>
+)
+
+<span class="code-keyword">val</span> discovery = client.<span class="code-function">discoverAccount</span>(serverUrl)
+<span class="code-keyword">if</span> (discovery <span class="code-keyword">is</span> <span class="code-type">DavResult.Success</span>) {
+    <span class="code-keyword">val</span> calendar = discovery.value.calendars.<span class="code-function">first</span>()
+
+    <span class="code-comment">// Create event</span>
+    <span class="code-keyword">val</span> event = <span class="code-type">ICalEvent</span>(
+        uid = <span class="code-type">UUID</span>.<span class="code-function">randomUUID</span>().<span class="code-function">toString</span>(),
+        summary = <span class="code-string">"Team Meeting"</span>,
+        dtStart = <span class="code-type">ICalDateTime</span>.<span class="code-function">fromInstant</span>(<span class="code-type">Instant</span>.<span class="code-function">now</span>()),
+        dtEnd = <span class="code-type">ICalDateTime</span>.<span class="code-function">fromInstant</span>(<span class="code-type">Instant</span>.<span class="code-function">now</span>().<span class="code-function">plus</span>(<span class="code-number">1</span>, <span class="code-type">ChronoUnit</span>.HOURS))
+    )
+    client.<span class="code-function">createEvent</span>(calendar.href, event)
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="modules">
+        <h2 class="section-title">Modules</h2>
+        <table class="module-table">
+            <thead>
+                <tr>
+                    <th>Module</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>icaldav-core</code></td>
+                    <td>Parse and generate iCalendar (RFC 5545)</td>
+                </tr>
+                <tr>
+                    <td><code>icaldav-client</code></td>
+                    <td>CalDAV/WebDAV client with discovery and CRUD</td>
+                </tr>
+                <tr>
+                    <td><code>icaldav-sync</code></td>
+                    <td>Sync engine with offline support and conflict resolution</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="providers">
+        <h2 class="section-title">Tested Providers</h2>
+        <div class="provider-grid">
+            <div class="provider-card">
+                <h4>iCloud</h4>
+                <p>Full support</p>
+            </div>
+            <div class="provider-card">
+                <h4>Nextcloud</h4>
+                <p>Full support</p>
+            </div>
+            <div class="provider-card">
+                <h4>Radicale</h4>
+                <p>Full support</p>
+            </div>
+            <div class="provider-card">
+                <h4>Baikal</h4>
+                <p>Full support</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="https://github.com/iCalDAV/iCalDAV">GitHub</a>
+            <a href="https://central.sonatype.com/namespace/org.onekash">Maven Central</a>
+            <a href="https://github.com/iCalDAV/iCalDAV/blob/main/CONTRIBUTING.md">Contributing</a>
+            <a href="https://github.com/iCalDAV/iCalDAV/issues">Issues</a>
+        </div>
+        <p class="footer-text">
+            Apache License 2.0 · Built by <a href="https://onekash.org">OneKash Labs</a>
+        </p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const text = btn.dataset.copy;
+                try {
+                    await navigator.clipboard.writeText(text);
+                    btn.textContent = 'Copied!';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = 'Copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    btn.textContent = 'Failed';
+                    setTimeout(() => btn.textContent = 'Copy', 2000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
