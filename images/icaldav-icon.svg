@@ -1,38 +1,80 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" fill="none">
-  <!-- Background -->
-  <rect width="72" height="72" rx="16" fill="url(#grad)"/>
+  <defs>
+    <linearGradient id="teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6BCB77"/>
+      <stop offset="100%" stop-color="#4CAF50"/>
+    </linearGradient>
 
-  <!-- Calendar body -->
-  <rect x="14" y="20" width="32" height="32" rx="4" fill="white" fill-opacity="0.95"/>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4D96FF"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
 
-  <!-- Calendar header -->
-  <rect x="14" y="20" width="32" height="10" rx="4" fill="white"/>
-  <rect x="14" y="26" width="32" height="4" fill="white"/>
+    <linearGradient id="coral" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B6B"/>
+      <stop offset="100%" stop-color="#EE5A5A"/>
+    </linearGradient>
 
-  <!-- Calendar rings -->
-  <rect x="22" y="16" width="3" height="8" rx="1.5" fill="white"/>
-  <rect x="35" y="16" width="3" height="8" rx="1.5" fill="white"/>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
 
-  <!-- Calendar grid dots -->
-  <circle cx="22" cy="38" r="2" fill="#7c5cff"/>
-  <circle cx="30" cy="38" r="2" fill="#7c5cff"/>
-  <circle cx="38" cy="38" r="2" fill="#7c5cff"/>
-  <circle cx="22" cy="46" r="2" fill="#7c5cff"/>
-  <circle cx="30" cy="46" r="2" fill="#7c5cff"/>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
 
-  <!-- Sync arrows -->
-  <g fill="white">
-    <!-- Top arrow (curved) -->
-    <path d="M52 28c0-5.5-4.5-10-10-10h-2v3h2c3.9 0 7 3.1 7 7h-4l5 6 5-6h-3z"/>
-    <!-- Bottom arrow (curved) -->
-    <path d="M52 44c0 5.5-4.5 10-10 10h-2v-3h2c3.9 0 7-3.1 7-7h-4l5-6 5 6h-3z"/>
+  <!-- Dark canvas -->
+  <rect width="72" height="72" rx="16" fill="#1C1C1E"/>
+
+  <!-- Tech grid -->
+  <g stroke="rgba(255,255,255,0.03)" stroke-width="0.5">
+    <line x1="18" y1="0" x2="18" y2="72"/>
+    <line x1="36" y1="0" x2="36" y2="72"/>
+    <line x1="54" y1="0" x2="54" y2="72"/>
+    <line x1="0" y1="18" x2="72" y2="18"/>
+    <line x1="0" y1="36" x2="72" y2="36"/>
+    <line x1="0" y1="54" x2="72" y2="54"/>
   </g>
 
-  <!-- Gradient definition -->
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#667eea"/>
-      <stop offset="100%" stop-color="#764ba2"/>
-    </linearGradient>
-  </defs>
+  <!-- Calendar card - sky blue -->
+  <g filter="url(#soft)">
+    <rect x="10" y="18" width="30" height="38" rx="5" fill="url(#sky)"/>
+    <rect x="17" y="14" width="3.5" height="8" rx="1.75" fill="white"/>
+    <rect x="29.5" y="14" width="3.5" height="8" rx="1.75" fill="white"/>
+    <rect x="10" y="27" width="30" height="1" fill="rgba(255,255,255,0.25)"/>
+  </g>
+
+  <!-- Privacy shield badge - teal -->
+  <circle cx="25" cy="42" r="11" fill="none" stroke="url(#teal)" stroke-width="1.5" opacity="0.4"/>
+  <circle cx="25" cy="42" r="9" fill="url(#teal)" filter="url(#soft)"/>
+  <path d="M21 42l3 3 6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Sync ring - coral accent -->
+  <circle cx="54" cy="38" r="13" stroke="rgba(255,255,255,0.1)" stroke-width="2" fill="none"/>
+  <circle cx="54" cy="38" r="13" stroke="url(#coral)" stroke-width="2.5" stroke-dasharray="20 62" stroke-linecap="round" transform="rotate(-60 54 38)"/>
+
+  <!-- Sync arrow -->
+  <g stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M48 38h12"/>
+    <path d="M56 34l4 4-4 4"/>
+  </g>
+
+  <!-- Network nodes -->
+  <g filter="url(#glow)">
+    <circle cx="54" cy="23" r="3.5" fill="url(#coral)"/>
+    <circle cx="68" cy="44" r="3" fill="url(#teal)"/>
+    <circle cx="48" cy="53" r="3" fill="url(#sky)"/>
+  </g>
+
+  <!-- Connection hints -->
+  <g stroke="rgba(255,255,255,0.08)" stroke-width="1">
+    <line x1="54" y1="26" x2="54" y2="25"/>
+    <line x1="65" y1="42" x2="66" y2="43"/>
+    <line x1="50" y1="50" x2="49" y2="51"/>
+  </g>
 </svg>
