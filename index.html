@@ -26,16 +26,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0a0a0f;
+            --bg-dark: #1C1C1E;
             --bg-code: #12121a;
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.7);
             --text-muted: rgba(255, 255, 255, 0.4);
-            --accent: #7c5cff;
-            --accent-glow: rgba(124, 92, 255, 0.3);
+            --accent: #4D96FF;
+            --accent-glow: rgba(77, 150, 255, 0.3);
+            --teal: #6BCB77;
+            --coral: #FF6B6B;
             --border: rgba(255, 255, 255, 0.1);
-            --success: #4ade80;
-            --gradient-purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success: #6BCB77;
+            --gradient-brand: linear-gradient(135deg, #4D96FF 0%, #6BCB77 100%);
         }
 
         * {
@@ -178,7 +180,7 @@
         }
 
         .btn-primary:hover {
-            background: #6b4ce0;
+            background: #3B82F6;
             text-decoration: none;
         }
 
@@ -561,7 +563,7 @@
     </nav>
 
     <section class="hero">
-        <div class="hero-badge">Kotlin · JVM 17+ · Apache 2.0</div>
+        <div class="hero-badge">Kotlin · JVM 17+ · Android API 21+ · Apache 2.0</div>
         <h1>CalDAV sync for Kotlin</h1>
         <p class="hero-desc">
             A CalDAV client with offline sync and conflict resolution. Works with iCloud, Nextcloud, and other CalDAV servers.
@@ -576,16 +578,18 @@
         <div class="install-box">
             <div class="install-header">
                 <span class="install-label">build.gradle.kts</span>
-                <button class="copy-btn" data-copy='implementation("org.onekash:icaldav-client:2.0.0")'>Copy</button>
+                <button class="copy-btn" data-copy='implementation("org.onekash:icaldav-client:2.3.1")'>Copy</button>
             </div>
             <div class="install-code">
                 <span class="comment">// Add to your dependencies</span><br>
-                implementation(<span class="string">"org.onekash:icaldav-client:2.0.0"</span>)<br><br>
+                implementation(<span class="string">"org.onekash:icaldav-client:2.3.1"</span>)<br><br>
                 <span class="comment">// Optional: Sync engine with offline support</span><br>
-                implementation(<span class="string">"org.onekash:icaldav-sync:2.0.0"</span>)
+                implementation(<span class="string">"org.onekash:icaldav-sync:2.3.1"</span>)<br><br>
+                <span class="comment">// Optional: Android CalendarContract mapper (API 21+)</span><br>
+                implementation(<span class="string">"org.onekash:icaldav-android:2.3.1"</span>)
             </div>
         </div>
-        <p class="install-note">Requires JVM 17+ and Kotlin 1.9+</p>
+        <p class="install-note">Requires JVM 17+ and Kotlin 1.9+. Android module requires API 21+.</p>
     </section>
 
     <section class="features" id="features">
@@ -620,6 +624,11 @@
                 <div class="feature-icon">🧩</div>
                 <h3>Modular</h3>
                 <p>Use just the parser, just the client, or the full sync engine. Your choice.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Android Native</h3>
+                <p>Map iCalDAV events to Android CalendarContract. Seamless system calendar integration.</p>
             </div>
         </div>
     </section>
@@ -695,6 +704,10 @@ if (discovery is DavResult.Success) {
                     <td><code>icaldav-sync</code></td>
                     <td>Sync engine with offline support and conflict resolution</td>
                 </tr>
+                <tr>
+                    <td><code>icaldav-android</code></td>
+                    <td>Android CalendarContract mapper (API 21+)</td>
+                </tr>
             </tbody>
         </table>
     </section>
@@ -729,7 +742,7 @@ if (discovery is DavResult.Success) {
             <a href="https://github.com/iCalDAV/iCalDAV/issues">Issues</a>
         </div>
         <p class="footer-text">
-            Apache License 2.0 · Built by <a href="https://onekash.org">OneKash Labs</a>
+            Apache License 2.0 · Built by <a href="https://onekashlabs.github.io">OneKash Labs</a>
         </p>
     </footer>
 
